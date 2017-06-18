@@ -33,9 +33,11 @@ namespace WindowsFormsApplication1
 
         }
 
-        public byte[] data_A = new byte[600000];
-        public byte[] data_B = new byte[600000];
+        public int cutNum = 10000;
 
+        public byte[] data_A = new byte[600000 - 10000 * 2];
+        public byte[] data_B = new byte[600000 - 10000 * 2];
+     
         private void button1_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -51,7 +53,7 @@ namespace WindowsFormsApplication1
 
                 //openFileDialog1.FileName = "*.txt";                                 
 
-                if (openFileDialog1.FilterIndex == 1)  //文件筛选器的索引，第一项
+                if (openFileDialog1.FilterIndex == 0)  //文件筛选器的索引，第一项
                 {
 
                     StreamReader sr = new StreamReader(FileName, Encoding.ASCII); //输入流用于从外部源读取数据
@@ -97,13 +99,15 @@ namespace WindowsFormsApplication1
                 else 
                 {
                     FileStream fs = new FileStream(FileName, FileMode.Open);
-                    datalength = (int)(fs.Length-2)/2;
+                    //datalength = (int)(fs.Length-2)/2;
+
+                    datalength = (int)((fs.Length - 2) / 2) - cutNum;
                     dataA = new double[datalength];
                     byte[] data = new byte[datalength*2];
 
                     
 
-                    fs.Seek(1, SeekOrigin.Begin);//跳过第一个字符
+                    fs.Seek(cutNum+1, SeekOrigin.Begin);//跳过字符
                     fs.Read(data, 0, datalength*2);
 
                     fs.Dispose();
@@ -186,7 +190,7 @@ namespace WindowsFormsApplication1
                     FileName = openFileDialog1.FileName;
                     //openFileDialog1.FileName = "*.txt"; 
 
-                    if (openFileDialog1.FilterIndex == 1)
+                    if (openFileDialog1.FilterIndex == 0)
                     {
 
                     StreamReader sr = new StreamReader(FileName, Encoding.ASCII);
@@ -232,13 +236,13 @@ namespace WindowsFormsApplication1
                 {
 
                     FileStream fs = new FileStream(FileName, FileMode.Open);
-                    datalength = (int)(fs.Length - 2) / 2;
+                    datalength = (int)(fs.Length - 2) / 2 - cutNum;
                     dataA = new double[datalength];
                     byte[] data = new byte[datalength * 2];
 
 
 
-                    fs.Seek(1, SeekOrigin.Begin);//跳过第一个字符
+                    fs.Seek(cutNum+1, SeekOrigin.Begin);//跳过第一个字符
                     fs.Read(data, 0, datalength * 2);
 
 
