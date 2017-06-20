@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -73,9 +74,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -123,7 +123,7 @@
             this.数据采集toolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1183, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(1166, 25);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -531,15 +531,6 @@
             this.progressBar1.Step = 1;
             this.progressBar1.TabIndex = 11;
             // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Location = new System.Drawing.Point(28, 25);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1155, 225);
-            this.panel1.TabIndex = 14;
-            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -550,14 +541,19 @@
             this.panel3.Size = new System.Drawing.Size(1155, 225);
             this.panel3.TabIndex = 15;
             // 
-            // panel2
+            // zedGraphControl1
             // 
-            this.panel2.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel2.Location = new System.Drawing.Point(28, 256);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1155, 225);
-            this.panel2.TabIndex = 16;
+            this.zedGraphControl1.Location = new System.Drawing.Point(28, 25);
+            this.zedGraphControl1.Name = "zedGraphControl1";
+            this.zedGraphControl1.ScrollGrace = 0D;
+            this.zedGraphControl1.ScrollMaxX = 0D;
+            this.zedGraphControl1.ScrollMaxY = 0D;
+            this.zedGraphControl1.ScrollMaxY2 = 0D;
+            this.zedGraphControl1.ScrollMinX = 0D;
+            this.zedGraphControl1.ScrollMinY = 0D;
+            this.zedGraphControl1.ScrollMinY2 = 0D;
+            this.zedGraphControl1.Size = new System.Drawing.Size(1155, 456);
+            this.zedGraphControl1.TabIndex = 16;
             // 
             // MainFrm
             // 
@@ -568,9 +564,8 @@
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1183, 723);
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.zedGraphControl1);
             this.Controls.Add(this.panel3);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -584,6 +579,7 @@
             this.Name = "MainFrm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "漏水检测演示系统";
+            this.Load += new System.EventHandler(this.MainFrm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -635,9 +631,7 @@
         private System.Windows.Forms.ToolStripMenuItem 数据采集toolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 采集探头数据toolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 互功率谱ToolStripMenuItem;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ToolStripMenuItem 比较ToolStripMenuItem;
         private System.Windows.Forms.TextBox textBoxOffSet;
         private System.Windows.Forms.Label label13;
@@ -645,6 +639,7 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox textBoxAvgB;
         private System.Windows.Forms.Label label14;
+        private ZedGraph.ZedGraphControl zedGraphControl1;
     }
 }
 

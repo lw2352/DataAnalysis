@@ -26,10 +26,10 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
 
-           
+            
 
-           // frm_width = this.Width;
-         //   frm_height = this.Height;
+            // frm_width = this.Width;
+            //   frm_height = this.Height;
 
         }
 
@@ -37,17 +37,89 @@ namespace WindowsFormsApplication1
 
         public byte[] data_A = new byte[600000 - 10000 * 2];
         public byte[] data_B = new byte[600000 - 10000 * 2];
-     
+
+        public double[] dataA;
+        public double[] dataB;
+
+        PointPairList listA = new PointPairList();
+        PointPairList listB = new PointPairList();
+
+        MasterPane master;
+
+
+        //画图并同步缩放
+        private void CreateGraph()
+        {
+            //画图 add by lw 6-19
+            /*MasterPane master = zedGraphControl1.MasterPane;
+            master.Title.IsVisible = true;
+            //master.Title.Text = "原始数据";
+            master.Margin.All = 3;
+            master.Fill = new Fill(Color.WhiteSmoke, Color.FromArgb(220, 220, 255), 45.0f);*/   
+
+            GraphPane paneA = new GraphPane();
+            GraphPane paneB = new GraphPane();
+
+            paneA.Title.IsVisible = false;
+            paneB.Title.IsVisible = false;
+
+            LineItem myCurveA = paneA.AddCurve("Porsche", listA, Color.Blue, SymbolType.None);
+            LineItem myCurveB = paneB.AddCurve("Porsche", listB, Color.Red, SymbolType.None);
+
+            master.Add(paneA);
+            master.Add(paneB);
+
+            using (Graphics g = zedGraphControl1.CreateGraphics())
+            {
+                master.SetLayout(g, PaneLayout.SquareColPreferred);
+                master.SetLayout(g, PaneLayout.SingleColumn);
+                master.AxisChange(g);
+            }
+
+            zedGraphControl1.IsSynchronizeXAxes = true;
+            zedGraphControl1.IsSynchronizeYAxes = true;
+
+            zedGraphControl1.IsAutoScrollRange = true;
+
+            zedGraphControl1.IsShowHScrollBar = true;
+            zedGraphControl1.IsShowVScrollBar = true;
+
+            zedGraphControl1.AxisChange();
+
+
+            //finished
+        }
+
+        //初始化图表
+        private void SetGraph()
+        {
+            //add 6-20
+            master = zedGraphControl1.MasterPane;
+            master.Title.IsVisible = true;
+            master.Title.Text = "原始数据";
+            master.Margin.All = 3;
+            master.Fill = new Fill(Color.WhiteSmoke, Color.FromArgb(220, 220, 255), 45.0f);
+        }
+
+        ////清空图
+        private void EraseGraph()
+        {
+            //清空
+            master.PaneList.Clear();
+            zedGraphControl1.Refresh();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
+            EraseGraph();
+
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-
                 string FileName;
                 int datalength=0;
                 double dataA_avg = 0;
                 double dataA_avgAbs = 0;
-                double[] dataA;
+                //double[] dataA;
 
                 FileName = openFileDialog1.FileName; //选取的文件
 
@@ -145,29 +217,30 @@ namespace WindowsFormsApplication1
                 //保存数据
                 WaterLeak.set_DataLength(datalength);
                 WaterLeak.set_DataA(dataA);
-                WaterLeak.set_DataA_Avg(dataA_avg);
-              
+                WaterLeak.set_DataA_Avg(dataA_avg);                
+
                 //画图形
-                panel1.Controls.Clear();  //清空
+                /*MasterPane.Controls.Clear();  //清空
 
                 ZedGraphControl zed1 = new ZedGraphControl();
-                zed1.Width = panel1.Width;
-                zed1.Height = panel1.Height;
-                panel1.Controls.Add(zed1);
+                zed1.Width = MasterPane.Width;
+                zed1.Height = MasterPane.Height;
+                MasterPane.Controls.Add(zed1);
 
                 GraphPane Pane = zed1.GraphPane;
                 /*Pane.Title = "数据A";
                 Pane.XAxis.Title = "点数";
                 Pane.YAxis.Title = "信号强度";*/
 
-                PointPairList list = new PointPairList();
+                //PointPairList list = new PointPairList();
+
                 for (int i = 0; i < datalength; i++)
                 {
-                    list.Add(i, dataA[i]);
+                    listA.Add(i, dataA[i]);
                 }
 
-                LineItem myCurve = Pane.AddCurve("Porsche", list, Color.Blue, SymbolType.None);
-                zed1.AxisChange();
+                //LineItem myCurve = Pane.AddCurve("Porsche", list, Color.Blue, SymbolType.None);
+                //zed1.AxisChange();
 
                 //开启状态使能
                 button2.Enabled = true;
@@ -183,9 +256,9 @@ namespace WindowsFormsApplication1
             {
                 string FileName;
                 int datalength = 0;
-                double dataA_avg = 0;
+                double dataB_avg = 0;
                 double dataB_avgAbs = 0;
-                double[] dataA;
+                //double[] dataA;
 
                     FileName = openFileDialog1.FileName;
                     //openFileDialog1.FileName = "*.txt"; 
@@ -193,7 +266,7 @@ namespace WindowsFormsApplication1
                     if (openFileDialog1.FilterIndex == 0)
                     {
 
-                    StreamReader sr = new StreamReader(FileName, Encoding.ASCII);
+                    /*StreamReader sr = new StreamReader(FileName, Encoding.ASCII);
                     //  int nextChar = sr.Read();
                     //  nextChar = sr.Read();
                     //  nextChar -= 0x30;
@@ -229,7 +302,7 @@ namespace WindowsFormsApplication1
                             dataA[i] = (dataA[i] * 0x10 + tmp[j]);
 
                         dataA_avg += dataA[i] / datalength;
-                    }
+                    }*/
 
                 }
                 else
@@ -237,7 +310,7 @@ namespace WindowsFormsApplication1
 
                     FileStream fs = new FileStream(FileName, FileMode.Open);
                     datalength = (int)(fs.Length - 2) / 2 - cutNum;
-                    dataA = new double[datalength];
+                    dataB = new double[datalength];
                     byte[] data = new byte[datalength * 2];
 
 
@@ -257,51 +330,51 @@ namespace WindowsFormsApplication1
 
 
                     for (int i = 0; i < datalength; i++)
-                        dataA[i] = (double)(data[2 * i] * 0x100 + data[2 * i + 1]);
+                        dataB[i] = (double)(data[2 * i] * 0x100 + data[2 * i + 1]);
 
 
-                    dataA_avg = 0;
+                    dataB_avg = 0;
                     for (int i = 0; i < datalength; i++)
-                        dataA_avg += dataA[i] / datalength;
+                        dataB_avg += dataB[i] / datalength;
                 
                 }
 
 
                  for (int i = 0; i < datalength; i++)
-                    dataA[i] = (dataA[i] - dataA_avg) / dataA_avg;
+                    dataB[i] = (dataB[i] - dataB_avg) / dataB_avg;
                 
                  //B平均幅值
                 for (int i = 0; i < datalength; i++)
-                    dataB_avgAbs += System.Math.Abs(dataA[i]) / datalength;
+                    dataB_avgAbs += System.Math.Abs(dataB[i]) / datalength;
                 textBoxAvgB.Text = dataB_avgAbs.ToString();
 
                 //保存数据
                 WaterLeak.set_DataLength(datalength);
-                WaterLeak.set_DataB(dataA);
-                WaterLeak.set_DataB_Avg(dataA_avg);
+                WaterLeak.set_DataB(dataB);
+                WaterLeak.set_DataB_Avg(dataB_avg);
 
 
                 //画图形
-                panel2.Controls.Clear();
+                /*panel2.Controls.Clear();
 
                 ZedGraphControl zed2 = new ZedGraphControl();
-                zed2.Width = panel1.Width;
-                zed2.Height = panel1.Height;
+                zed2.Width = MasterPane.Width;
+                zed2.Height = MasterPane.Height;
                 panel2.Controls.Add(zed2);
 
-                GraphPane Pane = zed2.GraphPane;
+                GraphPane Pane = zed2.GraphPane;*/
                 /*Pane.Title = "数据B";
                 Pane.XAxis.Title = "点数";
                 Pane.YAxis.Title = "信号强度";*/
 
-                PointPairList list = new PointPairList();
+                
                 for (int i = 0; i < datalength; i++)
                 {
-                    list.Add(i, dataA[i]);
+                    listB.Add(i, dataB[i]);
                 }
 
-                LineItem myCurve = Pane.AddCurve("Porsche", list, Color.Blue, SymbolType.None);
-                zed2.AxisChange();                    
+                //LineItem myCurve = Pane.AddCurve("Porsche", list, Color.Blue, SymbolType.None);
+                //zed2.AxisChange();                
 
                 //开启状态使能
                 button3.Enabled = true;
@@ -316,6 +389,8 @@ namespace WindowsFormsApplication1
      
         private void button3_Click(object sender, EventArgs e)
         {
+            CreateGraph();
+
             panel3.Controls.Clear();
 
             /*Label label13 = new Label();
@@ -558,7 +633,7 @@ namespace WindowsFormsApplication1
 
                 DateTime endDT = System.DateTime.Now;
                 TimeSpan time = endDT.Subtract(startDT);
-                MessageBox.Show(time.TotalMilliseconds.ToString() + "ms");
+                //MessageBox.Show(time.TotalMilliseconds.ToString() + "ms");
             }
 
             //if (互功率谱ToolStripMenuItem.Checked == true)
@@ -754,7 +829,11 @@ namespace WindowsFormsApplication1
         {
             SingleCheck(sender);
         }
-   
+
+        private void MainFrm_Load(object sender, EventArgs e)
+        {
+            SetGraph();
+        }
     }
 
     public class WaterLeak
