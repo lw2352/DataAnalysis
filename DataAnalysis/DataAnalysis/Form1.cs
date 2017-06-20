@@ -251,6 +251,7 @@ namespace WindowsFormsApplication1
 
         private void button2_Click(object sender, EventArgs e)
         {
+            EraseGraph();
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
