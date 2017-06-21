@@ -63,8 +63,8 @@ namespace WindowsFormsApplication1
             paneA.Title.IsVisible = false;
             paneB.Title.IsVisible = false;
 
-            LineItem myCurveA = paneA.AddCurve("Porsche", listA, Color.Blue, SymbolType.None);
-            LineItem myCurveB = paneB.AddCurve("Porsche", listB, Color.Red, SymbolType.None);
+            LineItem myCurveA = paneA.AddCurve("A", listA, Color.Blue, SymbolType.None);
+            LineItem myCurveB = paneB.AddCurve("B", listB, Color.Red, SymbolType.None);
 
             master.Add(paneA);
             master.Add(paneB);
