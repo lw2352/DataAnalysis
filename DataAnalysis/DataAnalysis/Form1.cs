@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -50,24 +51,42 @@ namespace WindowsFormsApplication1
         //画图并同步缩放
         private void CreateGraph()
         {
+            /*for (int i = 0; i < dataA.Length; i++)
+            {
+                listA.Add(i, dataA[i]);
+            }*/
+
             //画图 add by lw 6-19
             /*MasterPane master = zedGraphControl1.MasterPane;
             master.Title.IsVisible = true;
             //master.Title.Text = "原始数据";
             master.Margin.All = 3;
-            master.Fill = new Fill(Color.WhiteSmoke, Color.FromArgb(220, 220, 255), 45.0f);*/   
+            master.Fill = new Fill(Color.WhiteSmoke, Color.FromArgb(220, 220, 255), 45.0f);*/
+
 
             GraphPane paneA = new GraphPane();
             GraphPane paneB = new GraphPane();
-
+            
             paneA.Title.IsVisible = false;
             paneB.Title.IsVisible = false;
+            //paneA.Title.Text = "1号设备";
+            //paneB.Title.Text = "B设备";
 
-            LineItem myCurveA = paneA.AddCurve("A", listA, Color.Blue, SymbolType.None);
-            LineItem myCurveB = paneB.AddCurve("B", listB, Color.Red, SymbolType.None);
+            paneA.XAxis.Scale.Max = 300000;
+            paneB.XAxis.Scale.Max = 300000;
+
+            
+
+            LineItem myCurveA = paneA.AddCurve("", listA, Color.Blue, SymbolType.None);
+            LineItem myCurveB = paneB.AddCurve("", listB, Color.Red, SymbolType.None);
 
             master.Add(paneA);
             master.Add(paneB);
+
+            /*paneA.XAxis.IsVisible = false;
+            paneA.YAxis.IsVisible = false;
+            paneB.XAxis.IsVisible = false;
+            paneB.YAxis.IsVisible = false;*/
 
             using (Graphics g = zedGraphControl1.CreateGraphics())
             {
@@ -86,7 +105,6 @@ namespace WindowsFormsApplication1
 
             zedGraphControl1.AxisChange();
 
-
             //finished
         }
 
@@ -95,16 +113,17 @@ namespace WindowsFormsApplication1
         {
             //add 6-20
             master = zedGraphControl1.MasterPane;
-            master.Title.IsVisible = true;
-            master.Title.Text = "原始数据";
-            master.Margin.All = 3;
-            master.Fill = new Fill(Color.WhiteSmoke, Color.FromArgb(220, 220, 255), 45.0f);
+            master.Title.IsVisible = false;
+            //master.Title.Text = "原始数据";
+            master.Margin.All = 0;
+            //master.Fill = new Fill(Color.WhiteSmoke, Color.FromArgb(220, 220, 255), 45.0f);
         }
 
         ////清空图
         private void EraseGraph()
         {
             //清空
+            //zedGraphControl1.Dispose();
             master.PaneList.Clear();
             zedGraphControl1.Refresh();
         }
@@ -607,6 +626,8 @@ namespace WindowsFormsApplication1
             
                 panel3.Controls.Add(zed3);
                 GraphPane Pane = zed3.GraphPane;
+
+
                 /*Pane.Title = "互相关系数";
                 Pane.XAxis.Title = "";
                 Pane.YAxis.Title = "";*/
