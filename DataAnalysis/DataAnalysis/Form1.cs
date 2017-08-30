@@ -47,6 +47,25 @@ namespace WindowsFormsApplication1
 
         MasterPane master;
 
+        /**
+	 * 只遍历数组一次求方差，利用公式DX^2=EX^2-(EX)^2
+	 * @param a
+	 * @return
+	 */
+        private static double ComputeVariance2(double[] a)
+        {
+            double variance = 0;//方差
+            double sum = 0, sum2 = 0;
+            int i = 0, len = a.Length;
+            for (; i < len; i++)
+            {
+                sum += a[i];
+                sum2 += a[i] * a[i];
+            }
+            variance = sum2 / len - (sum / len) * (sum / len);
+            return variance;
+        }
+
 
         //画图并同步缩放
         private void CreateGraph()
@@ -216,6 +235,8 @@ namespace WindowsFormsApplication1
                         dataA_avg += dataA[i] / datalength;
                 }
 
+                double variance = ComputeVariance2(dataA);
+
                 //double[] data1 = dataA;
                 //double[] data2 = dataA;
                 //MyMath mm = new MyMath();
@@ -227,6 +248,8 @@ namespace WindowsFormsApplication1
 
                 for (int i = 0; i < datalength; i++)//归一处理
                     dataA[i] = (dataA[i] - dataA_avg) / dataA_avg;
+
+                
 
                 //A平均幅值
                 for (int i = 0; i < datalength; i++)
